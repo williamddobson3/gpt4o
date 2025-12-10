@@ -77,7 +77,7 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
 
 ## Usage
 
-### Basic Usage
+### Basic Usage (CLI)
 
 Run the chatbot:
 ```bash
@@ -85,6 +85,22 @@ python main.py
 ```
 
 The model will be downloaded automatically on first run (this may take some time depending on your internet connection).
+
+### Web Interface (Access from Local Machine)
+
+To access the chatbot from your local machine via web browser:
+
+```bash
+# Install web dependencies (first time)
+pip install flask flask-cors
+
+# Start web server
+python web_server.py
+```
+
+Then open your browser and go to: `http://YOUR_VPS_IP:8000`
+
+See [ACCESS_FROM_LOCAL.md](ACCESS_FROM_LOCAL.md) for detailed instructions on accessing from your local machine.
 
 ### Commands
 
