@@ -14,6 +14,12 @@ import torch
 #   - "microsoft/Phi-3-mini-4k-instruct" (smaller, faster)
 MODEL_NAME = "Qwen/Qwen2.5-7B-Instruct"
 
+# Local model path (for VPS deployment)
+# If set, the model will be loaded from this local path instead of downloading from Hugging Face
+# Set to None or empty string to use Hugging Face model hub
+# Example: LOCAL_MODEL_PATH = "/home/user/models/Qwen2.5-7B-Instruct"
+LOCAL_MODEL_PATH = os.getenv("LOCAL_MODEL_PATH", None)  # Set via environment or change here
+
 # Auto-detect GPU: Use CUDA if available, otherwise CPU
 # You can override by setting FORCE_DEVICE environment variable: "cuda" or "cpu"
 FORCE_DEVICE = os.getenv("FORCE_DEVICE", "").lower()

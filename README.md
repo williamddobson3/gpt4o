@@ -150,6 +150,10 @@ python check_gpu.py
 
 For deploying on a VPS with GPU, see [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
 
+**For local model setup on VPS (recommended):**
+- Quick start: See [VPS_LOCAL_QUICKSTART.md](VPS_LOCAL_QUICKSTART.md)
+- Detailed guide: See [LOCAL_MODEL_SETUP.md](LOCAL_MODEL_SETUP.md)
+
 ## Project Structure
 
 ```

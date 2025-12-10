@@ -2,6 +2,7 @@
 Chatbot implementation using Xenova/gpt-4o model
 """
 import torch
+import os
 from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 from typing import List, Dict, Optional
 import warnings
@@ -9,6 +10,7 @@ warnings.filterwarnings("ignore")
 
 from config import (
     MODEL_NAME,
+    LOCAL_MODEL_PATH,
     DEVICE,
     MAX_NEW_TOKENS,
     TEMPERATURE,
@@ -27,14 +29,24 @@ class ChatBot:
     
     def __init__(self):
         """Initialize the chatbot with the model"""
-        print(f"Loading model {MODEL_NAME}...")
+        # Determine model path (local or Hugging Face)
+        if LOCAL_MODEL_PATH and os.path.exists(LOCAL_MODEL_PATH):
+            model_path = LOCAL_MODEL_PATH
+            print(f"Loading model from local path: {model_path}")
+        else:
+            model_path = MODEL_NAME
+            if LOCAL_MODEL_PATH:
+                print(f"Warning: Local model path '{LOCAL_MODEL_PATH}' not found, using Hugging Face: {MODEL_NAME}")
+            else:
+                print(f"Loading model from Hugging Face: {MODEL_NAME}")
+        
         print(f"Device: {DEVICE}")
         
         try:
             # Load tokenizer
             print("Loading tokenizer...")
             self.tokenizer = AutoTokenizer.from_pretrained(
-                MODEL_NAME,
+                model_path,
                 trust_remote_code=TRUST_REMOTE_CODE
             )
             
@@ -43,7 +55,11 @@ class ChatBot:
                 self.tokenizer.pad_token = self.tokenizer.eos_token
             
             # Load model
-            print("Loading model (this may take a while on first run)...")
+            if LOCAL_MODEL_PATH and os.path.exists(LOCAL_MODEL_PATH):
+                print("Loading model from local storage...")
+            else:
+                print("Loading model (this may take a while on first run - downloading from Hugging Face)...")
+            
             model_kwargs = {
                 "trust_remote_code": TRUST_REMOTE_CODE,
             }
@@ -73,7 +89,7 @@ class ChatBot:
                     print("Warning: bitsandbytes not available, loading in full precision")
             
             self.model = AutoModelForCausalLM.from_pretrained(
-                MODEL_NAME,
+                model_path,
                 **model_kwargs
             )
             

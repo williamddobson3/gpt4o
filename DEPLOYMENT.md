@@ -75,7 +75,28 @@ Or upload files via SCP:
 scp -r /path/to/chat username@your-vps-ip:/home/username/
 ```
 
-### 2.2 Run deployment script
+### 2.2 Download Model Locally (Recommended for VPS)
+
+For VPS deployment, it's recommended to download the model locally first:
+
+```bash
+# Activate virtual environment
+source venv/bin/activate
+
+# Download model to local storage
+python download_model.py --model "Qwen/Qwen2.5-7B-Instruct" --path "./models"
+```
+
+This will save the model to `./models/Qwen_Qwen2.5-7B-Instruct/` (about 14GB).
+
+Then configure it in `config.py`:
+```python
+LOCAL_MODEL_PATH = "./models/Qwen_Qwen2.5-7B-Instruct"
+```
+
+See [LOCAL_MODEL_SETUP.md](LOCAL_MODEL_SETUP.md) for detailed instructions.
+
+### 2.3 Run deployment script
 
 **Option 1: Quick start (if virtual environment is already set up)**
 ```bash
