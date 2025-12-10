@@ -5,7 +5,14 @@ import os
 import torch
 
 # Model configuration
-MODEL_NAME = "Xenova/gpt-4o"
+# Note: "Xenova/gpt-4o" is not a valid model. Using a high-quality alternative.
+# You can change this to any valid Hugging Face model name.
+# Popular options:
+#   - "Qwen/Qwen2.5-7B-Instruct" (recommended, high quality)
+#   - "mistralai/Mistral-7B-Instruct-v0.2"
+#   - "meta-llama/Llama-3.1-8B-Instruct" (requires Hugging Face token)
+#   - "microsoft/Phi-3-mini-4k-instruct" (smaller, faster)
+MODEL_NAME = "Qwen/Qwen2.5-7B-Instruct"
 
 # Auto-detect GPU: Use CUDA if available, otherwise CPU
 # You can override by setting FORCE_DEVICE environment variable: "cuda" or "cpu"

@@ -100,26 +100,51 @@ class ChatBot:
     
     def format_prompt(self, user_message: str) -> str:
         """Format the prompt with system message and conversation history"""
-        # Add system prompt at the beginning if history is empty
-        if not self.conversation_history:
-            formatted = f"{SYSTEM_PROMPT}\n\n"
+        # Try to use the model's chat template if available
+        if hasattr(self.tokenizer, "apply_chat_template") and self.tokenizer.chat_template is not None:
+            # Prepare messages for chat template
+            messages = []
+            
+            # Add system message if history is empty
+            if not self.conversation_history:
+                messages.append({"role": "system", "content": SYSTEM_PROMPT})
+            
+            # Add recent conversation history
+            recent_history = self.conversation_history[-MAX_HISTORY_LENGTH:]
+            for msg in recent_history:
+                messages.append({"role": msg["role"], "content": msg["content"]})
+            
+            # Add current user message
+            messages.append({"role": "user", "content": user_message})
+            
+            # Apply chat template
+            formatted = self.tokenizer.apply_chat_template(
+                messages,
+                tokenize=False,
+                add_generation_prompt=True
+            )
+            return formatted
         else:
-            formatted = ""
-        
-        # Add recent conversation history
-        recent_history = self.conversation_history[-MAX_HISTORY_LENGTH:]
-        for msg in recent_history:
-            role = msg["role"]
-            content = msg["content"]
-            if role == "user":
-                formatted += f"User: {content}\n"
-            elif role == "assistant":
-                formatted += f"Assistant: {content}\n"
-        
-        # Add current user message
-        formatted += f"User: {user_message}\nAssistant:"
-        
-        return formatted
+            # Fallback to simple formatting
+            if not self.conversation_history:
+                formatted = f"{SYSTEM_PROMPT}\n\n"
+            else:
+                formatted = ""
+            
+            # Add recent conversation history
+            recent_history = self.conversation_history[-MAX_HISTORY_LENGTH:]
+            for msg in recent_history:
+                role = msg["role"]
+                content = msg["content"]
+                if role == "user":
+                    formatted += f"User: {content}\n"
+                elif role == "assistant":
+                    formatted += f"Assistant: {content}\n"
+            
+            # Add current user message
+            formatted += f"User: {user_message}\nAssistant:"
+            
+            return formatted
     
     def generate_response(self, user_message: str) -> str:
         """Generate a response to the user message"""
@@ -153,9 +178,14 @@ class ChatBot:
                 skip_special_tokens=True
             ).strip()
             
-            # Clean up response (remove any trailing user/assistant labels)
+            # Clean up response (remove any trailing user/assistant labels and special tokens)
             generated_text = generated_text.split("User:")[0].strip()
             generated_text = generated_text.split("Assistant:")[0].strip()
+            
+            # Remove common chat template artifacts
+            for token in ["<|im_end|>", "<|endoftext|>", "</s>", "<|end|>"]:
+                if generated_text.endswith(token):
+                    generated_text = generated_text[:-len(token)].strip()
             
             return generated_text
             

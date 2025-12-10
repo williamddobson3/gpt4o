@@ -1,6 +1,6 @@
 # GPT-4o Chatbot
 
-A chatbot implementation using the **Xenova/gpt-4o** model from Hugging Face. This project runs the model locally without requiring API keys.
+A chatbot implementation using high-quality open-source language models from Hugging Face. This project runs models locally without requiring API keys. Currently configured to use **Qwen2.5-7B-Instruct** (a high-quality alternative).
 
 ## Features
 
@@ -203,9 +203,15 @@ See `example.py` for a complete example.
 - Reduce `MAX_HISTORY_LENGTH` in `config.py`
 - Reduce `MAX_NEW_TOKENS` in `config.py`
 
+## Model Information
+
+The default model is **Qwen/Qwen2.5-7B-Instruct**, a high-quality open-source model. You can change the model by editing `MODEL_NAME` in `config.py`.
+
+See [MODEL_OPTIONS.md](MODEL_OPTIONS.md) for a list of recommended models and how to switch between them.
+
 ## License
 
-This project uses the Xenova/gpt-4o model. Please check the model's license on Hugging Face for usage terms.
+This project uses open-source models from Hugging Face. Please check each model's license on Hugging Face for usage terms.
 
 ## Notes
 
