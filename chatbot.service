@@ -1,0 +1,17 @@
+[Unit]
+Description=GPT-4o Chatbot Service
+After=network.target
+
+[Service]
+Type=simple
+User=YOUR_USERNAME
+WorkingDirectory=/home/YOUR_USERNAME/path/to/chatbot
+Environment="PATH=/home/YOUR_USERNAME/path/to/chatbot/venv/bin"
+ExecStart=/home/YOUR_USERNAME/path/to/chatbot/venv/bin/python /home/YOUR_USERNAME/path/to/chatbot/main.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
